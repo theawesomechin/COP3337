@@ -1,5 +1,4 @@
-import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
-
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class WordList {
@@ -14,18 +13,38 @@ public class WordList {
     public void insertWord(String word){
         WordMeaningNode wordNode = new WordMeaningNode(word);
         WordMeaningNode pointer = head;
-        if(word.compareTo(head.word.Word) < 0){
+        if(head == null){
+            head = wordNode;
+        }
+        else if(word.equalsIgnoreCase(pointer.word.Word) ){
+
+        }
+        else if(word.compareTo(head.word.Word) < 0){
             wordNode.next = head;
             head = wordNode;
         }
         else{
-            while(word.compareTo(pointer.next.word.Word) < 0 && pointer.next != null){
+            boolean resume = false;
+            while(pointer.next != null && word.compareTo(pointer.next.word.Word) < 0 ){
                 pointer = pointer.next;
+                if(word.equalsIgnoreCase(pointer.word.Word)){
+                    resume = true;
+                }
             }
-            wordNode.next = pointer.next;
-            pointer.next = wordNode;
+            if(!resume) {
+                wordNode.next = pointer.next;
+                pointer.next = wordNode;
+            }
         }
 
+    }
+
+    public void insertDefinition(String word, String def){
+        WordMeaningNode pointer = head;
+            while(!word.equalsIgnoreCase(pointer.word.Word) && pointer.next != null){
+                pointer = pointer.next;
+            }
+            pointer.word.addDefinition(def);
     }
 
     public void deleteWord(String word){
@@ -39,7 +58,12 @@ public class WordList {
                     pointer = pointer.next;
                 }
                 if (pointer.next == null) {
-                    System.out.println("word not found");
+                    JOptionPane.showMessageDialog(null, "Word not found cannot delete", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                if(deletedWords.size() == 1){
+                    deletedWords.remove(0);
+                    deletedWords.add("");
+                    deletedWords.add(pointer.next.word.Word);
                 }
                 deletedWords.add(pointer.next.word.Word);
                 pointer.next = pointer.next.next;
