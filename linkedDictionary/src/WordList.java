@@ -7,7 +7,7 @@ public class WordList {
     ArrayList<String> deletedWords = new ArrayList<>();
     public WordList(String s){
         head = new WordMeaningNode(s);
-        deletedWords.add("No Words in the List");
+        deletedWords.add("");
     }
 
     public void insertWord(String word){
@@ -51,6 +51,14 @@ public class WordList {
         WordMeaningNode pointer = head;
         if(pointer.word.Word.equalsIgnoreCase(word)){
             head = head.next;
+            if(deletedWords.get(0) == ""){
+            deletedWords.remove(0);
+            deletedWords.add(0, word);
+            }
+            else {
+                deletedWords.add(word);
+            }
+            System.out.println(deletedWords);
         }
         else{
             try {
@@ -60,12 +68,8 @@ public class WordList {
                 if (pointer.next == null) {
                     JOptionPane.showMessageDialog(null, "Word not found cannot delete", "Error", JOptionPane.ERROR_MESSAGE);
                 }
-                if(deletedWords.size() == 1){
-                    deletedWords.remove(0);
-                    deletedWords.add("");
-                    deletedWords.add(pointer.next.word.Word);
-                }
-                deletedWords.add(pointer.next.word.Word);
+                deletedWords.add(word);
+                System.out.println(deletedWords.toString());
                 pointer.next = pointer.next.next;
             }
             catch(Exception e){

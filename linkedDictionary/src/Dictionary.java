@@ -10,6 +10,7 @@ public class Dictionary {
     public static void viewMenu(WordList newDictionary){
         String allDeletedWords = "";
         for(String words : newDictionary.deletedWords){
+            //System.out.println(words);
             allDeletedWords += words + "\n";
         }
         JTextArea deletedWordsList = new JTextArea(allDeletedWords);
