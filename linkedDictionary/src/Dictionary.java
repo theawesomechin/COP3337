@@ -2,7 +2,6 @@ import javax.swing.*;
 
 public class Dictionary {
     public static void main(String[] args){
-
         WordList newDictionary = new WordList("school");
         newDictionary.head.word.addDefinition("An Educational Facility.");
         viewMenu(newDictionary);
@@ -16,10 +15,11 @@ public class Dictionary {
         JTextArea deletedWordsList = new JTextArea(allDeletedWords);
         JScrollPane deletedScroll = new JScrollPane(deletedWordsList);
 
+
         String[] options = {"Dictionary","Deleted","Cancel"};
         int response1 = JOptionPane.showOptionDialog(null, "Welcome to the Dictionary App\n\n" +
-                        "Dictionary: Shows in a scrollable window all the Words and there definitions" +
-                        "\nDeleted: Shows a list of all deleted words from the Dictionary"
+                        "Dictionary: shows dictionary options" +
+                        "\nDeleted: Shows a list of all deprecated words from the Dictionary"
                 , "Dictionary Program",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,null, options,options[0]);
 
@@ -30,17 +30,28 @@ public class Dictionary {
             }
         }
         else if(response1 == 1){
+            if(newDictionary.deletedWords.size() == 0){
+                int resultant = JOptionPane.showOptionDialog(null, "No Deleted Words", "Error", JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE, null, null, null);
+                if(resultant == JOptionPane.OK_OPTION){viewMenu(newDictionary); }
+                else{
+                    viewMenu(newDictionary);
+                }
+            }
             for(String delWords : newDictionary.deletedWords){
-                //int option = JOptionPane.OK_CANCEL_OPTION;
-                int resultD = JOptionPane.showOptionDialog(null, deletedScroll,"Deleted Words", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+                int resultD = JOptionPane.showOptionDialog(null, deletedScroll,"Deleted Words",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
                 if(resultD == JOptionPane.OK_OPTION){
                     viewMenu(newDictionary);
                 }
                 else{
                     System.exit(0);
                 }
-                System.out.println(delWords);
+                //System.out.println(delWords);
             }
+        }
+        else if (response1 == JOptionPane.CLOSED_OPTION || response1 == JOptionPane.CANCEL_OPTION){
+            System.exit(0);
         }
     }
 
@@ -72,24 +83,43 @@ public class Dictionary {
                 }
                 break;
             case 1:
-                String delWord = JOptionPane.showInputDialog(null, "Type the word you would like to delete");
+                try {
+                    String delWord = JOptionPane.showInputDialog(null, "Type the word you would like to delete");
 
-                while(delWord.equalsIgnoreCase("") || delWord == null) {
-                    delWord = JOptionPane.showInputDialog(null, "Type the word you would like to delete");
+                    while (delWord.equalsIgnoreCase("") || delWord == null) {
+                        delWord = JOptionPane.showInputDialog(null, "Type the word you would like to delete");
+                    }
+
+                    newDictionary.deleteWord(delWord);
                 }
-                newDictionary.deleteWord(delWord);
+                catch(NullPointerException e){
+                    viewDictionary(newDictionary);
+                }
                 break;
             case 2:
-                WordMeaningNode pointer = newDictionary.head;
-                System.out.println("---------------");
-                while(pointer != null){
-                    System.out.println(pointer.word.Word) ;
-                    for(String defs : pointer.word.Definitions){
-                        System.out.println("\t-" + defs);
+                WordMeaningNode traverse = newDictionary.head;
+                String allDictionaryWords = "";
+
+                while(traverse != null){
+                    String multiDef = "";
+                    for(String defs : traverse.word.Definitions){
+                        multiDef +="\t-" + defs + "\n";
                     }
-                    pointer = pointer.next;
+                    allDictionaryWords += traverse.word.Word + "\n" + multiDef;
+                    traverse = traverse.next;
                 }
-                System.out.println("---------------");
+                JTextArea dictionaryWords = new JTextArea(allDictionaryWords);
+                JScrollPane dictionaryScroll = new JScrollPane(dictionaryWords);
+
+                int resultD = JOptionPane.showOptionDialog(null, dictionaryScroll,"Dictionary",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+                if(resultD == JOptionPane.OK_OPTION){
+                    viewDictionary(newDictionary);
+                }
+                else{
+                    viewDictionary(newDictionary);
+                }
+
                 break;
             case 3:
                 viewMenu(newDictionary);
