@@ -47,9 +47,11 @@ public class MyJFrame extends JFrame implements Constants {
                         if(Constants.FILE[j].equals("List Files") || Constants.FILE[j].equals("Save As")){
                             menu.add(menuItem);
                             menu.addSeparator();
+                            menuItem.addActionListener(new Actions());
                         }
                         else{
                             menu.add(menuItem);
+                            menuItem.addActionListener(new Actions());
                         }
                     }
                     break;
@@ -59,6 +61,7 @@ public class MyJFrame extends JFrame implements Constants {
                         menuItem = new JMenuItem(Constants.TOOL[j]);
                         if(Constants.TOOL[j].equals("Search")){
                             menu.add(menuItem);
+                            menuItem.addActionListener(new Actions());
                             menu.addSeparator();
                         }
                         else if(Constants.TOOL[j].equals("Edit")){
@@ -66,12 +69,14 @@ public class MyJFrame extends JFrame implements Constants {
 
                             for(int l = 0; l < Constants.EDIT.length; l++){
                                 cascadeMenu.add(cascadeItem = new JMenuItem(Constants.EDIT[l]));
+                                cascadeItem.addActionListener(new Actions());
                                 buttonGroup.add(cascadeItem);
                             }
                             menu.add(cascadeMenu);
                         }
                         else{
                             menu.add(menuItem);
+                            menuItem.addActionListener(new Actions());
                         }
                     }
                     break;

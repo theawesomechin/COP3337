@@ -1,8 +1,12 @@
+import org.w3c.dom.events.MouseEvent;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseListener;
 
-public class DisplayText {
-    private JTextArea text;
+public class DisplayText{
+    public JTextArea text;
+    String copiedText = "";
 
     public DisplayText(String name, String content){
         MyJFrame frame = new MyJFrame(name);
@@ -13,4 +17,20 @@ public class DisplayText {
         frame.setBounds(Constants.X_POS, Constants.Y_POS, 500, 400);
         frame.setVisible(true);
     }
+
+    public void selectText(){
+            try{
+                copiedText = text.getSelectedText();
+            }
+            catch (NullPointerException e){
+                System.out.println("Exception is here");
+            }
+
+    }
+
+    public void insertText(){
+        text.replaceSelection(copiedText);
+        System.out.println("Paste");
+    }
+
 }
